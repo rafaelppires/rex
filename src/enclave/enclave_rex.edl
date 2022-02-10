@@ -1,0 +1,40 @@
+enclave {
+    from "sgx_tstdc.edl" import *;
+    from "sgx_pthread.edl" import *;
+    include "args_rex.h"
+    include "sys/types.h"
+    include "sgx_report.h"
+    include "sgx_qve_header.h"
+    include "sgx_ql_quote.h"
+
+    untrusted {
+        void uprint([in, string] const char *str);
+        ssize_t ocall_send([in, string] const char *id,
+                           [in, size=length] const void *buffer, size_t length);
+        void ocall_farewell();
+
+        void ocall_start_timer([in, string] const char *hash);
+        double ocall_stop_timer([in, string] const char *hash);
+        void ocall_statsprobe_start([in, string] const char *hash);
+        double ocall_statsprobe_stop([in, string] const char *hash);
+        void ocall_statsprobe_summary([in, string] const char *hash,
+                                      [out, size=sz] uint8_t* buf, size_t sz);
+
+        int ocall_get_target_info([out]sgx_target_info_t* p_qe3_target);        
+        int ocall_get_quote([in] sgx_report_t *report,                          
+                [out, size=buff_size] uint8_t *quote_buff, size_t buff_size);   
+        int ocall_verify_quote(                                                 
+                [in, size=quote_size]const uint8_t *quote_data, size_t quote_size,
+                [in,out] sgx_ql_qe_report_info_t *qve_report_info,              
+                [out] time_t *expiration_check_date,                            
+                [out] uint32_t *collateral_expiration_status,                   
+                [out] sgx_ql_qv_result_t *quote_verification_result,            
+                [out, size=buff_size] uint8_t *supplemental_data, uint32_t buff_size,
+                [out] uint32_t *supplemental_data_size);
+    };
+
+    trusted {
+        public int ecall_init(struct EnclaveArguments args);
+        public int ecall_input([in,size=ndata] const char *data, size_t ndata);
+    };
+};

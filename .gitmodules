@@ -1,0 +1,3 @@
+[submodule "src/sgx_common"]
+	path = src/sgx_common
+	url = git@github.com:rafaelppires/sgx_common.git

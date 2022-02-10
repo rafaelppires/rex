@@ -1,0 +1,43 @@
+INTEL_ROOT           := /opt/intel
+SSL_ROOT             := $(INTEL_ROOT)/sgxssl
+SSL_LIBRARY_PATH     := $(SSL_ROOT)/lib64
+SGX_SDK              := $(INTEL_ROOT)/sgxsdk
+SGX_LIBRARY_PATH     := $(SGX_SDK)/lib64
+SGX_ENCLAVE_SIGNER   := $(SGX_SDK)/bin/x64/sgx_sign
+SGX_EDGER8R          := $(SGX_SDK)/bin/x64/sgx_edger8r
+SGX_COMMONDIR  := $(realpath src/sgx_common)
+
+SgxApp_Lib_Dirs    += $(SGX_LIBRARY_PATH) $(SSL_LIBRARY_PATH) 
+SgxApp_Link_Flags  := $(addprefix -L, $(SgxApp_Lib_Dirs)) \
+                      $(addprefix -l, $(SgxApp_Libs))
+
+Natv_CFlags     := $(SharedTUFlags) $(CFlags)
+Natv_CXXFlags   := $(SharedTUFlags) $(CXXFlags)
+TrustedFlags    += $(SharedTUFlags) -nostdinc -fvisibility=hidden \
+                   -fpie -fstack-protector -fno-builtin-printf
+Encl_CFlags     := $(TrustedFlags) $(CFlags) \
+                   -Wno-implicit-function-declaration
+Encl_CXXFlags   := $(TrustedFlags) $(CXXFlags) -nostdinc++
+
+Service_Library_Name := sgx_tservice
+Enclave_SDK_Libs     := -Wl,--whole-archive \
+                        $(addprefix -l, $(WholeArchiveEnclaveLibs))\
+                        -Wl,--no-whole-archive \
+                        -Wl,--start-group \
+                             $(addprefix -l, sgx_tstdc sgx_tcxx sgx_tcrypto \
+                                             $(Service_Library_Name) ) \
+                        -Wl,--end-group \
+                        -lsgx_tstdc
+Enclave_Lib_Dirs     := $(SSL_ROOT)/lib64/ $(SGX_LIBRARY_PATH)
+Enclave_Link_Flags   := $(addprefix -L, $(Enclave_Lib_Dirs)) \
+                        $(addprefix -l, $(Enclave_Libs)) \
+                        $(Enclave_SDK_Libs)
+EnclaveLFlags := -Wl,--no-undefined -nostdlib \
+    -nodefaultlibs -nostartfiles $(Enclave_Link_Flags)  \
+    -Wl,-Bstatic -Wl,-Bsymbolic -Wl,--no-undefined \
+    -Wl,-pie,-eenclave_entry -Wl,--export-dynamic  \
+    -Wl,--defsym,__ImageBase=0 \
+    -Wl,--version-script=$(EnclaveSources)/$(EnclaveName).lds
+
+EDLSearchPaths += $(SGX_SDK)/include $(SSL_ROOT)/include
+
