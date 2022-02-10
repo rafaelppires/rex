@@ -1,10 +1,10 @@
 # Rex: SGX decentralized recommender
 This repository contains the code of a decentralized recommender system that 
 shares data instead of models and protects user's privacy by using Intel SGX.
-Its description and evaluation was published in the paper
+Its description and evaluation were published in the paper
 "TEE-based decentralized recommender systems: The raw data sharing redemption",
 which will be presented in the 36th International Parallel and Distributed Processing
-Symposium, that took place in Lyon (France) from May 30 - June 3, 2022.
+Symposium (IPDPS) in Lyon, France, from May 30 - June 3, 2022.
 
 If this code or the ideas in the paper are somehow helpful to you,
 please cite us according to this bib(liographic) entry:
