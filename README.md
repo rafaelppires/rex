@@ -16,7 +16,8 @@ please cite us according to this bib(liographic) entry:
       and Pires, Rafael},
   booktitle={36th {IEEE} International Parallel and Distributed Processing Symposium ({IPDPS})}, 
   title={{TEE}-based decentralized recommender systems: The raw data sharing redemption},
-  doi={10.48550/arXiv.2202.11655},
+  pages={447--458},
+  doi={10.1109/IPDPS53621.2022.00050},
   year={2022},
 }
 ```
