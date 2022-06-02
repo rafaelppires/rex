@@ -3,8 +3,8 @@ This repository contains the code of a decentralized recommender system that
 shares data instead of models and protects user's privacy by using Intel SGX.
 Its description and evaluation were published in the paper
 ["TEE-based decentralized recommender systems: The raw data sharing redemption"](https://arxiv.org/pdf/2202.11655),
-which will be presented in the 36th International Parallel and Distributed Processing
-Symposium (IPDPS) in Lyon, France, from May 30 - June 3, 2022.
+which was presented in the 36th International Parallel and Distributed Processing
+Symposium (IPDPS) on May 31st 2022.
 
 If this code or the ideas in the paper are somehow helpful to you,
 please cite us according to this bib(liographic) entry:
